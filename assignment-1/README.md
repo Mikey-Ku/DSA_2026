@@ -58,28 +58,24 @@ dependencies at all.
 
 ## Building and running
 
-The Gradle wrapper is checked in, so no local Gradle install is needed. A JDK 17
-or newer must be on `PATH` (Gradle downloads a matching JDK 21 toolchain for the
-compile itself).
-
-If the build stops with *"Gradle requires JVM 17 or later"*, an older JDK is
-first on `PATH`. Point `JAVA_HOME` at a newer one for the session:
+This assignment is one subproject of the `DSA_2026` Gradle build, so run these
+**from the repository root**, not from this folder:
 
 ```bash
-export JAVA_HOME=$(/usr/libexec/java_home -v 17+)   # macOS
+./gradlew :assignment-1:test    # run the 62 unit tests
+./gradlew :assignment-1:run     # run a small demo of all three programs
+./gradlew :assignment-1:build   # compile and test
 ```
 
-On macOS with a Homebrew JDK that `java_home` does not list, use the Homebrew
-path directly, for example `export JAVA_HOME=/opt/homebrew/opt/openjdk@21`.
+The Gradle wrapper is checked in, so no local Gradle install is needed. The
+build also declares which JDK it wants (`gradle/gradle-daemon-jvm.properties`
+plus `jvmToolchain(21)`), so Gradle locates or downloads a JDK 21 on its own —
+it works even when the default `java` on `PATH` is older, which was the case on
+the machine this was written on.
 
-```bash
-./gradlew test    # run the 62 unit tests
-./gradlew run     # run a small demo of all three programs
-./gradlew build   # compile and test everything
-```
-
-`./gradlew run` prints a few generated sentences, the winner of the Tennessee
-capital election, and the point counts of the snowflake at depths 0 through 5.
+`:assignment-1:run` prints a few generated sentences, the winner of the
+Tennessee capital election, and the point counts of the snowflake at depths 0
+through 5.
 
 ### Checking the port against the original
 
@@ -106,20 +102,24 @@ is there so the two implementations can be read and run side by side.
 ## Layout
 
 ```
-assignment-1/
-├── build.gradle.kts             Gradle build, JVM toolchain 21
-├── src/main/kotlin/
-│   ├── Main.kt                  demo runner
-│   ├── CrossCheck.kt            prints next-word maps for the diff harness
-│   ├── markov/Markov.kt         Markov text generation
-│   ├── vote/Vote.kt             instant-runoff voting, recursive and iterative
-│   ├── snowflake/Snowflake.kt   Koch snowflake
-│   └── geometry/Geometry.kt     Point, dist, degrees, addDistDegrees
-├── src/test/kotlin/             62 tests, one suite per source file
-└── reference/
-    ├── corpus.txt               source texts shared by both implementations
-    ├── crosscheck.sh            runs both and diffs the output
-    └── python/                  the original Python, unmodified
+DSA_2026/                            the Gradle build lives at the repo root
+├── settings.gradle.kts              declares assignment-1 as a subproject
+├── gradlew, gradle/                 wrapper, and the JDK the build asks for
+└── assignment-1/
+    ├── build.gradle.kts             Kotlin JVM plugin, JVM toolchain 21
+    ├── README.md                    this file
+    ├── src/main/kotlin/
+    │   ├── Main.kt                  demo runner
+    │   ├── CrossCheck.kt            prints next-word maps for the diff harness
+    │   ├── markov/Markov.kt         Markov text generation
+    │   ├── vote/Vote.kt             instant-runoff voting, recursive + iterative
+    │   ├── snowflake/Snowflake.kt   Koch snowflake
+    │   └── geometry/Geometry.kt     Point, dist, degrees, addDistDegrees
+    ├── src/test/kotlin/             62 tests, one suite per source file
+    └── reference/
+        ├── corpus.txt               source texts shared by both implementations
+        ├── crosscheck.sh            runs both and diffs the output
+        └── python/                  the original Python, unmodified
 ```
 
 ---

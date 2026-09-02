@@ -14,6 +14,7 @@
 set -euo pipefail
 
 project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+repo_root="$(cd "$project_dir/.." && pwd)"
 work_dir="$(mktemp -d)"
 trap 'rm -rf "$work_dir"' EXIT
 
@@ -22,7 +23,7 @@ echo "Running the original Python..."
     > "$work_dir/python.txt"
 
 echo "Running the Kotlin port..."
-"$project_dir/gradlew" --project-dir "$project_dir" --quiet crossCheck \
+"$repo_root/gradlew" --project-dir "$repo_root" --quiet :assignment-1:crossCheck \
     > "$work_dir/kotlin.txt"
 
 if diff -u "$work_dir/python.txt" "$work_dir/kotlin.txt"; then

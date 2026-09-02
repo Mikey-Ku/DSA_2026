@@ -3,6 +3,9 @@ plugins {
     application
 }
 
+group = "edu.olin.dsa2026"
+version = "1.0-SNAPSHOT"
+
 repositories {
     mavenCentral()
 }
