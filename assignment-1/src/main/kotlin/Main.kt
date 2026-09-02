@@ -3,6 +3,9 @@ import kotlin.random.Random
 import markov.buildNextWords
 import markov.buildWordList
 import markov.generateText
+import scheduler.findConflictByPairs
+import scheduler.findConflictBySorting
+import scheduler.meeting
 import snowflake.makeSnowflake
 import vote.holdAlternativeVote
 
@@ -36,6 +39,24 @@ fun main() {
     }
     val result = holdAlternativeVote(candidates, votes)
     println("Winner: ${result.winner} with ${result.votes} votes")
+
+    println()
+    println("--- Meeting scheduler ---")
+    val conflicting = listOf(
+        meeting("Advising", "10:00", "11:00"),
+        meeting("Lab", "13:00", "14:00"),
+        meeting("Office hours", "10:45", "11:30"),
+    )
+    val backToBack = listOf(
+        meeting("Advising", "10:00", "11:00"),
+        meeting("Standup", "11:00", "11:30"),
+        meeting("Lab", "13:00", "14:00"),
+    )
+    for ((label, schedule) in listOf("overlapping" to conflicting, "back-to-back" to backToBack)) {
+        println("$label schedule:")
+        println("  pairwise: ${findConflictByPairs(schedule) ?: "no conflict"}")
+        println("  sorting:  ${findConflictBySorting(schedule) ?: "no conflict"}")
+    }
 
     println()
     println("--- Koch snowflake ---")

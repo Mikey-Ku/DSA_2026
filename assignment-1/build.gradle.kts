@@ -42,3 +42,14 @@ tasks.register<JavaExec>("crossCheck") {
     classpath = sourceSets["main"].runtimeClasspath
     args(layout.projectDirectory.file("reference/corpus.txt").asFile.path)
 }
+
+/**
+ * Time the two meeting-conflict algorithms on schedules of increasing size, to
+ * check the predicted growth rates against measured ones.
+ */
+tasks.register<JavaExec>("benchmark") {
+    group = "verification"
+    description = "Time the pairwise and sorting conflict detectors as n grows."
+    mainClass.set("scheduler.BenchmarkKt")
+    classpath = sourceSets["main"].runtimeClasspath
+}
