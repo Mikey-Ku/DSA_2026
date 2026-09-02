@@ -31,7 +31,7 @@ private fun fastestMillis(block: () -> Unit): Double =
 /**
  * Time both conflict-detection algorithms on schedules of increasing size.
  *
- * This is indicative, not a rigorous benchmark — there is no JMH here, just a
+ * This is indicative, not a rigorous benchmark. There is no JMH here, just a
  * warm-up and a best-of-five. It is enough to show the shapes apart: doubling n
  * should roughly quadruple the pairwise time and roughly double the sorting
  * time.

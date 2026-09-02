@@ -47,7 +47,7 @@ fun formatTime(minutesSinceMidnight: Int): String {
  * A meeting occupying the half-open time interval `[start, end)`.
  *
  * Half-open is the whole trick to this problem. Because the end minute is
- * excluded, a meeting running 10:00–11:00 and one running 11:00–11:30 share no
+ * excluded, a meeting running 10:00-11:00 and one running 11:00-11:30 share no
  * minute at all, which is exactly the rule the problem asks for: a meeting
  * ending precisely when another begins is not a conflict.
  *

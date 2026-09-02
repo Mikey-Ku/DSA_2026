@@ -10,7 +10,7 @@ Coursework for Data Structures and Algorithms, 2026.
 
 This is a Gradle multi-project build with one subproject per assignment. The
 Gradle wrapper is checked in, so no local Gradle install is needed, and the
-build declares the JDK it wants — Gradle locates or downloads a JDK 21 itself
+build declares the JDK it wants. Gradle locates or downloads a JDK 21 itself
 rather than relying on whatever `java` happens to be on `PATH`.
 
 Run everything from this directory:
@@ -25,6 +25,6 @@ Each assignment has its own README with details on what it contains.
 
 ## Opening in an editor
 
-Open **this** folder (`DSA_2026`), not an individual assignment folder — the
+Open **this** folder (`DSA_2026`), not an individual assignment folder. The
 Gradle build lives here, and that is what an IDE needs in order to resolve
 imports and offer completion.

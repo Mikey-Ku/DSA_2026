@@ -14,11 +14,11 @@ count as an overlap.
 
 ## Modelling the times
 
-A meeting is stored as the half-open interval `[start, end)` — the end minute is
-excluded — with both times held as minutes since midnight.
+A meeting is stored as the half-open interval `[start, end)`, where the end minute is
+excluded, with both times held as minutes since midnight.
 
 That single choice is what makes the awkward edge case disappear. Under
-half-open intervals, 10:00–11:00 and 11:00–11:30 share no minute, so they simply
+half-open intervals, 10:00-11:00 and 11:00-11:30 share no minute, so they simply
 are not an overlap; there is no special case to remember and no `if` to get
 wrong. Two half-open intervals overlap exactly when
 
@@ -34,13 +34,13 @@ lives inside a single day, and integers make the comparisons obvious. `HH:MM`
 strings are parsed at the boundary by `timeOf`, so the awkward parsing lives in
 one place instead of being scattered through the algorithms.
 
-## Algorithm 1 — check every pair
+## Algorithm 1: check every pair
 
 For each meeting, compare it against every meeting later in the list, and return
 the first overlapping pair found.
 
 Only *later* meetings are considered. This halves the work and, more usefully,
-means a meeting is never compared against itself — which matters, because every
+means a meeting is never compared against itself, which matters, because every
 meeting overlaps itself.
 
 **Correctness** is immediate: if a conflicting pair exists, it is one of the
@@ -53,11 +53,11 @@ pairs examined.
 ```
 
 which is Θ(n²). Doubling n should roughly **quadruple** the work. The best case
-is O(1) — if the first two meetings clash, it returns after one comparison — so
+is O(1). If the first two meetings clash, it returns after one comparison, so
 this is Θ(n²) in the worst case, not in every case. Extra space is O(1); the
 input is only read.
 
-## Algorithm 2 — sort by start time, then check neighbours
+## Algorithm 2: sort by start time, then check neighbours
 
 Sort the meetings by start time using Kotlin's built-in `sortedBy`, then walk the
 sorted list once, comparing only **adjacent** pairs.
@@ -84,8 +84,8 @@ neighbours is enough. Sorting also simplifies the test itself: since
 `previous.start ≤ current.start` is guaranteed, the two-sided overlap check
 collapses to the single comparison `current.start < previous.end`.
 
-There is a test for this directly — `sorting still finds a conflict when the
-overlapping pair is not adjacent` — which builds a schedule whose overlapping
+There is a test for this directly, `sorting still finds a conflict when the
+overlapping pair is not adjacent`, which builds a schedule whose overlapping
 pair is separated after sorting and confirms a conflict is still reported.
 
 **Running time.** The sort is Θ(n log n) and the scan is Θ(n), so the total is
@@ -106,7 +106,7 @@ double the sorting time (`2n log 2n = 2n log n + 2n`).
 
 ## Measured growth
 
-`./gradlew :assignment-1:benchmark` times both on conflict-free schedules —
+`./gradlew :assignment-1:benchmark` times both on conflict-free schedules, which is
 deliberately the worst case, since any conflict lets the pairwise version stop
 early and would measure luck rather than scaling. Measured on an M-series Mac,
 JDK 21, best of 7 runs after warm-up:
@@ -121,7 +121,7 @@ JDK 21, best of 7 runs after warm-up:
   16000 |   240.18 ms |   4.4x |     1.63 ms |   1.9x
 ```
 
-The adjacent ratios are noisy — the 2.6x at n=4000 is measurement artefact, not
+The adjacent ratios are noisy. The 2.6x at n=4000 is measurement artefact, not
 a change in behaviour, since this is a plain timing loop and not a proper JMH
 benchmark. The end-to-end figure is far more trustworthy: from n=1000 to
 n=16000, a **16× increase in input**, the pairwise time grew **267×** against
@@ -134,7 +134,7 @@ with every doubling.
 
 ## Which one would I actually use?
 
-The sorting version, in nearly all cases — but the pairwise version is not
+The sorting version, in nearly all cases, but the pairwise version is not
 strictly worse. It allocates nothing, it can return after a single comparison
 when a conflict is early, and for a handful of meetings the sort's constant
 factor dominates. For a personal calendar with a dozen entries the difference is

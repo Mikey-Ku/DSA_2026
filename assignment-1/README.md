@@ -13,30 +13,85 @@ Submitted through the Google Form. Nothing in this repo.
 
 **Answer:**
 
+A moment that worked really well for me was teaching myself machine learning. A
+few things helped. I watched as many YouTube videos as I could, but most of the
+learning came from doing: building things, looking at other people's work, having
+conversations about it, and using AI as a tutor. The biggest factor was trial and
+error. I kept testing things, kept trying, and kept challenging myself. Making
+mistakes is what made things stick. The more mistakes I made, the more I
+remembered and the better I understood.
+
 
 ### 2. Which strategies have led to less effective learning, or less enjoyment of the learning experience?
 
 **Answer:**
+
+Back-to-back lectures without enough practice in between. In a class I took last
+semester, I would sometimes get lost partway through a topic and not be able to
+get the help I needed. The material was fairly experimental and there were not
+many CAs available. Because each lesson built on the one before it, falling
+behind on one thing made the next one harder, and it was difficult to catch up.
+
+What I want to avoid this time is being in that position without examples to work
+from. If there are practice examples at every step, I have something concrete to
+ask about. Without them it is hard to ask a question that is actually relevant,
+or to know what direction to go in.
 
 
 ### 3. The instructor's view is that grappling with a problem is what makes the concepts stick, and that prompting an AI for answers and copying them does not get you there. Do you agree with this framing? How are you thinking about AI tools in this course?
 
 **Answer:**
 
+I agree with the framing. Having AI produce your answers for you does hurt your
+learning.
+
+That said, I have always thought of AI as one of the best tutors available. I use
+it as a tutor because I can ask questions continuously, give it my own reasoning
+and get feedback on it, and keep asking follow-ups without feeling like I am
+wasting someone's time.
+
+I think it comes down to how you use it and how you view it. This course covers
+material that is taught everywhere and is well documented online, and it is not
+extremely technically complicated, so AI is going to be useful here. The
+important part is the balance, and not reaching for it to answer every question.
+
 
 ### 4. What strategies will you use in this course to be successful? With respect to AI, what principles will you use?
 
 **Answer:**
+
+Mainly practice. This class is foundational to a lot of computer science, so
+there are a large number of resources and contest problems available. I plan to
+use those and work through as many problems as I can.
+
+For AI, my principle is to challenge myself first. If I get properly stuck, I
+will ask for a hint or a way to move forward rather than for the answer, so that
+I can keep going and get more practice. The more problems I see, the better I
+will get and the more I will understand.
 
 
 ### 5. What do you think of the proposed activities for the oral quizzes? Would you add or subtract any?
 
 **Answer:**
 
+I like oral quizzes. I think they are one of the best ways to actually
+demonstrate what you know, and they are close to what the industry does with code
+review and technical interviews, where you sit down, look at code, and talk
+through it.
+
+The one activity I am less sure about is reading code I did not write, unless it
+is fairly standard, because there can be a lot of variability in how people write
+things. For this class I am not too worried, since a lot of the material is
+fairly cut and dry.
+
 
 ### 6. How can the teaching team support you?
 
 **Answer:**
+
+Being available when I have questions, and being willing to help when I feel
+behind. Beyond that, providing plenty of material to work through, and keeping
+the class fun. I think this is going to be an enjoyable class.
 
 
 ---
@@ -141,8 +196,8 @@ begins is not a conflict.
 
 Both required algorithms are in `src/main/kotlin/scheduler/Scheduler.kt`:
 
-- `findConflictByPairs` — the straightforward version, comparing every pair
-- `findConflictBySorting` — sorts by start time with Kotlin's built-in
+- `findConflictByPairs`: the straightforward version, comparing every pair
+- `findConflictBySorting`: sorts by start time with Kotlin's built-in
   `sortedBy`, then compares only neighbouring meetings
 
 Expected growth with n:

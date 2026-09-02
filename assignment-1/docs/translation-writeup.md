@@ -15,7 +15,7 @@ behaviour.
 
 ## What the code does
 
-The source was one assignment — *dictionaries, recursion, and refactoring* —
+The source was one assignment, *dictionaries, recursion, and refactoring*,
 made up of three unrelated programs. All three are ported here.
 
 ### 1. Markov text generation (`markov`)
@@ -42,7 +42,7 @@ it stops counting toward the total.
 The assignment supplied a working iterative implementation and asked for a
 recursive rewrite, which is the "refactoring" half. **Both versions are ported**
 (`holdIterativeVote` and `holdAlternativeVote`), because the whole point of that
-exercise was that they must agree — and that is a property worth asserting
+exercise was that they must agree, and that is a property worth asserting
 rather than assuming. See `RefactoringEquivalenceTest`.
 
 ### 3. Koch snowflake (`snowflake`, `geometry`)
@@ -76,7 +76,7 @@ and one that runs an election with **3,000 candidates**, eliminating one per
 round; both pass. The Python originals are written exactly the same way and
 would hit the interpreter's default recursion limit at around 1,000 frames. The
 recursive version of the vote function was the assignment's *refactoring*
-exercise, and in Python it is strictly worse than the loop it replaced — it can
+exercise, and in Python it is strictly worse than the loop it replaced, since it can
 only handle smaller elections. In Kotlin it costs nothing. That was the single
 most satisfying thing I found.
 
@@ -87,14 +87,14 @@ through the snowflake code until it fails somewhere far from the mistake, and
 every caller of the vote function had to remember which slot was which.
 `data class Point(val x: Double, val y: Double)` and
 `data class ElectionResult(val winner: String, val votes: Int)` fixed both, and
-the generated `equals`/`toString` paid for themselves in the tests — a whole
+the generated `equals`/`toString` paid for themselves in the tests. A whole
 snowflake can be compared with one `assertEquals`, and a failure prints readable
 points instead of a wall of unlabelled numbers.
 
 **Passing the randomness in was the biggest testability win.** The Python called
 `random.choice`, which reads the interpreter-wide generator. The only way to
 make its output repeatable is `random.seed()`, which mutates process-global state
-and can be clobbered by anything else in the test run — the original test suite
+and can be clobbered by anything else in the test run. The original test suite
 sidesteps this entirely by only ever testing sentences with no branching, where
 the random choice has nothing to choose between. In Kotlin I made it a parameter
 with a default:
@@ -107,7 +107,7 @@ Callers who don't care are unaffected; tests pass `Random(seed = 42)` and get
 determinism with no global state. That let me write tests the original couldn't:
 that the same seed reproduces a sentence, that different seeds actually explore
 different sentences, and that every generated sentence ends in terminal
-punctuation — on a genuinely branching source text.
+punctuation, on a genuinely branching source text.
 
 **`List` and `MutableList` being different types forced me to be deliberate.**
 In Python every list is mutable and you find out at runtime. Having to write
@@ -121,14 +121,14 @@ under construction and which were finished.
 with no argument it splits on *runs* of whitespace and discards leading and
 trailing whitespace. Kotlin's `String.split` has no equivalent overload, and the
 obvious translation, `sourceText.split(" ")`, silently produces empty strings
-for every double space and newline — which then become fake words in the map and
+for every double space and newline, which then become fake words in the map and
 poison everything downstream. The correct translation is
 `sourceText.split(Regex("\\s+")).filter { it.isNotEmpty() }`. The original test
 suite has six separate cases about whitespace, which is how I knew to look.
 
 **Ceremony.** The Python was four files in a folder. Getting Kotlin to the point
 of running one line of it meant a Gradle build script, a settings file, a
-toolchain declaration, and a wrapper — and my system `java` was 11, which Gradle
+toolchain declaration, and a wrapper. My system `java` was 11, which Gradle
 9 refuses to run on, so that had to be sorted before anything compiled at all.
 Once it was working the tooling was genuinely better (a real test runner, a
 compiler that catches typos), but the distance from zero to *hello world* is
@@ -141,7 +141,7 @@ stdlib is deliberately thin and leans on Java underneath.
 
 **Float comparison had to be rebuilt.** Python's `math.isclose(a, b,
 abs_tol=1e-9)` has no `kotlin.test` equivalent, so the geometry tests define
-`assertClose` and `assertPointClose`. The absolute tolerance matters here — many
+`assertClose` and `assertPointClose`. The absolute tolerance matters here, because many
 of the coordinates under test are very near zero, where a relative comparison
 behaves badly.
 
@@ -149,13 +149,13 @@ behaves badly.
 
 **`build_next_words` mutates the list it is iterating over.** The original walks
 `words` with a `while i < len(words) - 1` loop and calls `words.insert(i + 1,
-"")` inside the loop body — growing the list whose length is the loop bound,
+"")` inside the loop body, growing the list whose length is the loop bound,
 while the index walks forward into the thing it just inserted. It works, but I
 could not port it until I could state what it was actually doing. It turns out
 to be equivalent to something much simpler: insert a boundary marker after every
 sentence-ending word *up front*, then walk consecutive pairs. The Kotlin does
 that, and produces byte-identical output on every input I have thrown at it. The
-translation didn't just move the code, it forced me to understand it — and the
+translation didn't just move the code, it forced me to understand it, and the
 result is shorter and has no mutation-during-iteration at all.
 
 **I found a condition that does nothing.** The original ends with:
@@ -166,7 +166,7 @@ if punctuation not in last_word and last_word != "":
 ```
 
 `punctuation` is the string `".!?"`, so `punctuation not in last_word` is a
-*substring* test — it asks whether the word literally contains the three
+*substring* test. It asks whether the word literally contains the three
 characters `.!?` in a row. It was surely meant to be `last_word[-1] not in
 punctuation`, testing the final character. The bug never fires: by the time that
 line runs, `last_word` is only ever non-empty when the text stopped mid-sentence,
@@ -178,8 +178,8 @@ only the half that carries meaning, with a comment saying why.
 
 **The empty string wearing three hats.** In the original, `""` is the
 start-of-sentence marker, the end-of-sentence marker, and "not a real word",
-with nothing naming any of those roles. It is safe — `build_word_list` can never
-produce an empty string, so it can't collide with real data — but you have to
+with nothing naming any of those roles. It is safe, because `build_word_list` can never
+produce an empty string, so it cannot collide with real data, but you have to
 work that out yourself. The port declares `const val SENTENCE_BOUNDARY = ""` and
 says so in a doc comment.
 
@@ -191,12 +191,12 @@ in Python; the Kotlin rejects it with `require`.
 
 ### One thing I decided not to "fix"
 
-Given empty input, the original returns `{"": []}` rather than `{}` — a map with
+Given empty input, the original returns `{"": []}` rather than `{}`, a map with
 one key that leads nowhere. It is a harmless artifact of how the sentinels are
 laid down. I reproduced it exactly instead of tidying it, and there is a test
 that pins it with a comment explaining why. The brief was to translate the code,
 not to improve it, and an intentional quirk that is documented and tested is
-better than a silent behaviour change. Everywhere I *did* deviate — dropping the
-matplotlib dependency, injecting the random generator, adding argument
-validation — it was an addition around the edges, not a change to what the
+better than a silent behaviour change. Everywhere I *did* deviate, whether dropping the
+matplotlib dependency, injecting the random generator, or adding argument
+validation, it was an addition around the edges, not a change to what the
 algorithms compute.
