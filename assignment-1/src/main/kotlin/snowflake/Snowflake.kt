@@ -46,10 +46,8 @@ fun transformSegment(startPoint: Point, endPoint: Point): List<Point> {
  * Every segment in [points] is replaced by its five-point transformation, and
  * the process repeats [depth] times. A depth of zero returns [points] unchanged.
  *
- * This is marked `tailrec`, so the compiler rewrites the recursion into a loop.
- * The Python original is written the same way but gets no such treatment: it
- * consumes a stack frame per iteration and is capped by the interpreter's
- * recursion limit.
+ * This is marked `tailrec`, so the compiler rewrites the recursion into a loop
+ * rather than consuming a stack frame per iteration.
  *
  * @param points The points of the snowflake so far, in order. Must not be empty.
  * @param depth How many further iterations to generate. Must not be negative.

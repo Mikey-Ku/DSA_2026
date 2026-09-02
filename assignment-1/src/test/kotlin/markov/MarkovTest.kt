@@ -230,9 +230,8 @@ class BuildNextWordsTest {
 
     @Test
     fun `an empty text tracks only an unreachable boundary`() {
-        // The Python original returns {"": []} here rather than {}, and the port
-        // reproduces that exactly. Nothing can be generated from it either way,
-        // but matching the original means the behaviour was chosen, not lost.
+        // An empty text still records the boundary, with nothing following it,
+        // so no sentence can be generated from the result.
         assertEquals(mapOf(SENTENCE_BOUNDARY to emptyList()), buildNextWords(emptyList()))
     }
 

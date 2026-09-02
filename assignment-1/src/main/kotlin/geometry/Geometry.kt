@@ -5,24 +5,14 @@ import kotlin.math.cos
 import kotlin.math.hypot
 import kotlin.math.sin
 
-/**
- * A point in the two-dimensional plane.
- *
- * The Python original modelled points as a bare `tuple[float, float]` alias.
- * That alias is erased at runtime, so nothing stopped a three-element tuple or
- * a tuple of strings from flowing through the snowflake code until it failed
- * somewhere far from the mistake. A data class gives the compiler something to
- * check, and its generated `equals`, `hashCode`, and `toString` are what make
- * the tests below readable.
- */
+/** A point in the two-dimensional plane. */
 data class Point(val x: Double, val y: Double)
 
 /**
  * Calculate the straight-line distance between two points.
  *
- * This replaces Python's `math.dist`. Like `math.dist`, it is built on `hypot`
- * rather than a literal `sqrt(dx * dx + dy * dy)`, which avoids overflowing or
- * underflowing for extreme coordinates.
+ * Built on `hypot` rather than a literal `sqrt(dx * dx + dy * dy)`, which avoids
+ * overflowing or underflowing for extreme coordinates.
  *
  * @param start The point to measure from.
  * @param end The point to measure to.

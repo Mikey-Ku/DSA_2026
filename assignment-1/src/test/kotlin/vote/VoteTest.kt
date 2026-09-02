@@ -213,10 +213,9 @@ class RunoffTest {
 
 class RefactoringEquivalenceTest {
     /**
-     * The point of the original refactoring exercise was that the recursive
-     * rewrite had to behave exactly like the iterative version it replaced. That
-     * is a property worth checking directly rather than case by case, so this
-     * throws randomly generated elections at both and demands they agree.
+     * The recursive and iterative versions must behave identically. That is a
+     * property worth checking directly rather than case by case, so this throws
+     * randomly generated elections at both and requires that they agree.
      */
     @Test
     fun `the recursive and iterative implementations agree on random elections`() {
@@ -239,8 +238,7 @@ class RefactoringEquivalenceTest {
     @Test
     fun `deep recursion does not overflow the stack`() {
         // holdAlternativeVote is tailrec, so eliminating thousands of candidates
-        // one per round compiles to a loop. Python's default recursion limit
-        // would stop the equivalent call at around 1000 candidates.
+        // one per round compiles to a loop instead of nesting stack frames.
         val candidates = List(3000) { "Candidate $it" }
         assertEquals(
             ElectionResult("Candidate 2999", 0),

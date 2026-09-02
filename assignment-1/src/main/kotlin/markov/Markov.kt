@@ -13,7 +13,7 @@ const val SENTENCE_BOUNDARY: String = ""
 /** The characters that, at the end of a word, end a sentence. */
 private const val TERMINATORS = ".!?"
 
-/** Matches any run of whitespace, mirroring the behaviour of Python's `str.split()`. */
+/** Matches any run of whitespace, so consecutive spaces and newlines split as one. */
 private val WHITESPACE = Regex("\\s+")
 
 /**
@@ -103,11 +103,8 @@ fun buildNextWords(wordList: List<String>): Map<String, List<String>> {
  * Starting from [SENTENCE_BOUNDARY], a next word is chosen at random until one
  * of them ends a sentence.
  *
- * The source of randomness is a parameter rather than a global. The Python
- * original called `random.choice`, which reads the interpreter-wide generator,
- * so the only way to make its output repeatable was to seed that global and hope
- * nothing else touched it. Passing a [Random] in makes the tests deterministic
- * without any global state.
+ * The source of randomness is a parameter rather than a global, so a caller can
+ * pass a seeded [Random] and get repeatable output.
  *
  * @param nextWords A map from each word to the words that may follow it, as
  *     produced by [buildNextWords].

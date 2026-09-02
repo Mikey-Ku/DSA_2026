@@ -3,11 +3,6 @@ package vote
 /**
  * The outcome of an election.
  *
- * The Python original returned a bare `(str, int)` tuple, so every caller had to
- * remember which slot was which and unpack it positionally. Naming the fields
- * makes `result.votes` impossible to confuse with `result.winner`, and swapping
- * the two becomes a compile error instead of a silent bug.
- *
  * @property winner The name of the winning candidate.
  * @property votes The number of votes the winner received in the final round.
  */
@@ -106,9 +101,8 @@ tailrec fun holdAlternativeVote(
 /**
  * Determine the winner of an alternative (instant runoff) election, iteratively.
  *
- * This is a direct translation of the loop-based implementation the assignment
- * supplied as the starting point. It is kept so the tests can assert that the
- * recursive rewrite in [holdAlternativeVote] produces identical results.
+ * The loop-based implementation, kept so the tests can assert that the recursive
+ * version in [holdAlternativeVote] produces identical results.
  *
  * @param candidates The candidates in the race. Must not be empty.
  * @param rankedVotes The ranked votes, each ordered most to least preferred.

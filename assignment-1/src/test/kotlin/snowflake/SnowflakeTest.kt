@@ -207,7 +207,6 @@ class MakeSnowflakeTest {
     @Test
     fun `deep recursion does not overflow the stack`() {
         // makeSnowflake is tailrec, so the compiler turns this into a loop.
-        // The equivalent Python hits its recursion limit at around 1000 frames.
         val single = listOf(Point(0.0, 0.0))
         assertEquals(single, makeSnowflake(single, 1_000_000))
     }
