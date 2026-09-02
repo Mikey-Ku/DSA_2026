@@ -60,21 +60,9 @@ dependencies at all.
 
 ## Running it
 
-See [the assignment README](../README.md) for the commands. The differential
-check against the original Python is:
-
-```bash
-./assignment-1/reference/crosscheck.sh
-```
-
-It runs `markov.py` and the Kotlin port over the same 17 source texts, prints the
-next-word map each builds in the same normalised format, and diffs them. It
-currently reports 107 transitions agree, including the awkward cases: text that
-stops mid-sentence, text that is nothing but whitespace, and text made of several
-one-word sentences.
-
-Tests written after a translation can encode what the port *does* rather than
-what the original *did*. This is the guard against that.
+See [the assignment README](../README.md) for the commands. The Python this was
+translated from is in `reference/python/`, unmodified, so the two can be read
+side by side.
 
 ## Writeup: how the translation went
 

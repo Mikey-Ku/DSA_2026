@@ -32,18 +32,6 @@ tasks.test {
 }
 
 /**
- * Print this port's next-word maps for the shared corpus, in the same format as
- * `reference/python/crosscheck.py`. `reference/crosscheck.sh` diffs the two.
- */
-tasks.register<JavaExec>("crossCheck") {
-    group = "verification"
-    description = "Print next-word maps for reference/corpus.txt, for diffing against the Python original."
-    mainClass.set("CrossCheckKt")
-    classpath = sourceSets["main"].runtimeClasspath
-    args(layout.projectDirectory.file("reference/corpus.txt").asFile.path)
-}
-
-/**
  * Time the two meeting-conflict algorithms on schedules of increasing size, to
  * check the predicted growth rates against measured ones.
  */

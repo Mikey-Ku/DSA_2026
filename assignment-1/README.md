@@ -3,29 +3,9 @@
 Michael Ku
 Data Structures and Algorithms, Fall 2026
 
-**Language choice: Kotlin** (the course default).
-
----
-
-## Running the code
-
-All commands run from the repository root, one level above this folder.
-
-```bash
-./gradlew :assignment-1:test        # 83 unit tests
-./gradlew :assignment-1:run         # run the demos
-./gradlew :assignment-1:benchmark   # time the two scheduler algorithms
-```
-
-The Gradle wrapper is checked in, so Gradle does not need to be installed.
-
----
-
 ## Part 1: Course Entry Survey
 
 Submitted through the Google Form. Nothing in this repo.
-
----
 
 ## Part 2: Identifying Effective Strategies for Learning
 
@@ -66,12 +46,6 @@ Submitted through the Google Form. Nothing in this repo.
 I read the *Getting Set with Kotlin* page and worked through the beginner Kotlin
 tour, attempting the exercises.
 
-Setup used for this assignment:
-
-- IntelliJ IDEA on macOS
-- Gradle rather than Maven, which the setup page lists as the other option
-- JDK 21
-
 ### 1. What features do you like about Kotlin?
 
 **Answer:**
@@ -99,7 +73,7 @@ Setup used for this assignment:
 ### What the original code was
 
 Three Python programs I wrote for the dictionaries, recursion, and refactoring
-assignment in Olin's Software Design course:
+assignment for Softdes 2025:
 
 1. **Markov text generation.** Reads a source text, records which words follow
    which other words, and generates new sentences by walking that record at
@@ -112,10 +86,6 @@ assignment in Olin's Software Design course:
 3. **Koch snowflake.** Replaces every line segment with four segments a third as
    long, with an equilateral bump on the middle third, and repeats.
 
-The original also used matplotlib to draw the snowflake. The port keeps the three
-geometry helpers it needed and drops the plotting, so it has no third-party
-dependencies.
-
 ### The Kotlin code
 
 | File | Contents |
@@ -125,17 +95,6 @@ dependencies.
 | `src/main/kotlin/snowflake/Snowflake.kt` | `transformSegment`, `makeSnowflake` |
 | `src/main/kotlin/geometry/Geometry.kt` | `Point`, `dist`, `degrees`, `addDistDegrees` |
 | `src/main/kotlin/Main.kt` | Demo runner for all four programs |
-| `src/main/kotlin/CrossCheck.kt` | Prints next-word maps so they can be diffed against the Python |
-
-Kotlin features the port relies on:
-
-- `tailrec` on `makeSnowflake` and `holdAlternativeVote`, so the compiler turns
-  the recursion into a loop
-- `data class` for `Point` and `ElectionResult`, replacing Python tuples
-- Nullable return types (`String?`, `Conflict?`) instead of returning `None`
-- A `Random` parameter with a default, instead of seeding a global generator
-- `List` and `MutableList` as separate types
-- `require` and `requireNotNull` for argument checking
 
 ### Tests
 
@@ -145,14 +104,8 @@ contract. A few are new, and were only possible because the random generator is
 now injected: that the same seed reproduces a sentence, and that different seeds
 produce different ones.
 
-There is also a differential test. `reference/crosscheck.sh` runs the original
-Python and the Kotlin port over the same 17 source texts and diffs the maps they
-build. It reports **107 transitions agree**. This guards against writing tests
-that describe what the port does rather than what the original did.
-
-```bash
-./assignment-1/reference/crosscheck.sh
-```
+The Python I translated from is kept in `reference/python/` so the original and
+the port can be read side by side.
 
 ### How the translation went
 
@@ -212,7 +165,6 @@ assignment-1/
 │   └── meeting-scheduler.md         part 5 writeup
 ├── src/main/kotlin/
 │   ├── Main.kt
-│   ├── CrossCheck.kt
 │   ├── geometry/Geometry.kt
 │   ├── markov/Markov.kt
 │   ├── vote/Vote.kt
@@ -221,8 +173,5 @@ assignment-1/
 │       ├── Scheduler.kt
 │       └── Benchmark.kt
 ├── src/test/kotlin/                 83 tests
-└── reference/
-    ├── corpus.txt
-    ├── crosscheck.sh
-    └── python/                      the original Python, unmodified
+└── reference/python/                the original Python, unmodified
 ```
