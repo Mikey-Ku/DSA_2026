@@ -187,6 +187,9 @@ produce different ones.
 The Python I translated from is kept in `reference/python/` so the original and
 the port can be read side by side.
 
+How the translation went, including the good, the bad, and the ugly:
+**[docs/translation-writeup.md](docs/translation-writeup.md)**
+
 
 ## Part 5: Implementing Meeting Scheduler
 
