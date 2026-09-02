@@ -1,0 +1,20 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.kotlin/
+out/
+
+# Python (reference sources only; nothing here is built)
+__pycache__/
+*.pyc
+.venv/
+
+# macOS
+.DS_Store
