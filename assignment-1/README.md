@@ -50,20 +50,45 @@ tour, attempting the exercises.
 
 **Answer:**
 
+One of the main things I like about Kotlin is how familiar it feels coming from
+Java. Many of its basic concepts, such as functions, classes, and common data
+structures, translate fairly easily from what I already know. I also like that
+Kotlin is statically typed. After becoming comfortable with TypeScript, I have
+come to appreciate having types checked before running a program because it makes
+the code clearer and helps catch mistakes. At the same time, Kotlin's type
+inference means that I do not always have to explicitly write each type, which
+keeps the code concise.
+
 
 ### 2. Are there things you were expecting to find that you haven't?
 
 **Answer:**
+
+There was not anything major that I expected to find but did not. Since Kotlin
+shares many concepts with Java, most of its basic features felt familiar.
+However, I was surprised by how concise Kotlin's syntax can be compared with
+Java, especially because of features such as type inference and its simpler
+function syntax.
 
 
 ### 3. What questions do you have?
 
 **Answer:**
 
+I do not have any immediate questions because I usually learn a new language by
+experimenting with it and seeing how its different features behave. However, I am
+curious about how Kotlin's efficiency and performance compare with Java and other
+languages. I would also like to learn more about the libraries available for
+Kotlin and how external libraries are added to and used within a project.
+
 
 ### 4. Did you use the debugger? Do you have experience with interactive debuggers? Were you able to launch it?
 
 **Answer:**
+
+I have experience using interactive debuggers like this one. I was able to
+successfully launch the Kotlin debugger and experiment with its basic
+functionality.
 
 
 ---
@@ -107,19 +132,6 @@ produce different ones.
 The Python I translated from is kept in `reference/python/` so the original and
 the port can be read side by side.
 
-### How the translation went
-
-Short version: `tailrec` made the recursive rewrite better than the loop it
-replaced instead of worse, data classes fixed the untyped tuples, and injecting
-the random generator made the text generator testable. The awkward parts were
-Python's `str.split()` having no Kotlin equivalent, a loop in the original that
-mutates the list it iterates over, and a condition in the original that turns out
-to have no effect.
-
-Full writeup, including the parts that went badly:
-**[docs/translation-writeup.md](docs/translation-writeup.md)**
-
----
 
 ## Part 5: Implementing Meeting Scheduler
 
@@ -151,27 +163,3 @@ schedules checking that the two algorithms always agree.
 Writeup, including why comparing only neighbours is enough and measured timings
 against the predicted growth:
 **[docs/meeting-scheduler.md](docs/meeting-scheduler.md)**
-
----
-
-## Layout
-
-```
-assignment-1/
-├── README.md                        this file
-├── build.gradle.kts
-├── docs/
-│   ├── translation-writeup.md       part 4 writeup
-│   └── meeting-scheduler.md         part 5 writeup
-├── src/main/kotlin/
-│   ├── Main.kt
-│   ├── geometry/Geometry.kt
-│   ├── markov/Markov.kt
-│   ├── vote/Vote.kt
-│   ├── snowflake/Snowflake.kt
-│   └── scheduler/
-│       ├── Scheduler.kt
-│       └── Benchmark.kt
-├── src/test/kotlin/                 83 tests
-└── reference/python/                the original Python, unmodified
-```
