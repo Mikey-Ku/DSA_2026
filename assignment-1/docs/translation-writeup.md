@@ -58,48 +58,23 @@ dependencies at all.
 
 ---
 
-## Building and running
+## Running it
 
-Run these **from the repository root**, not from this folder:
-
-```bash
-./gradlew :assignment-1:test    # run all 83 unit tests
-./gradlew :assignment-1:run     # run a small demo of all four programs
-./gradlew :assignment-1:build   # compile and test
-```
-
-The Gradle wrapper is checked in, so no local Gradle install is needed. The
-build also declares which JDK it wants (`gradle/gradle-daemon-jvm.properties`
-plus `jvmToolchain(21)`), so Gradle locates or downloads a JDK 21 on its own —
-it works even when the default `java` on `PATH` is older, which was the case on
-the machine this was written on.
-
-`:assignment-1:run` prints a few generated sentences, the winner of the
-Tennessee capital election, and the point counts of the snowflake at depths 0
-through 5.
-
-### Checking the port against the original
-
-Tests written after a translation have an obvious failure mode: they can encode
-what the port *does* rather than what the original *did*. So the port is also
-checked directly against the Python.
+See [the assignment README](../README.md) for the commands. The differential
+check against the original Python is:
 
 ```bash
-./reference/crosscheck.sh
+./assignment-1/reference/crosscheck.sh
 ```
 
-This runs the original `markov.py` (in `reference/python/`) and the Kotlin port
-over the same corpus of 17 source texts, prints the next-word map each one
-builds in an identical normalised format, and diffs them. It currently reports
-**107 transitions agree**, including the awkward cases — text that stops
-mid-sentence, text that is nothing but whitespace, and text with several
-sentences of a single word each.
+It runs `markov.py` and the Kotlin port over the same 17 source texts, prints the
+next-word map each builds in the same normalised format, and diffs them. It
+currently reports 107 transitions agree, including the awkward cases: text that
+stops mid-sentence, text that is nothing but whitespace, and text made of several
+one-word sentences.
 
-Requires `python3` on `PATH`. Nothing in `reference/` is compiled or shipped; it
-is there so the two implementations can be read and run side by side.
-
----
-
+Tests written after a translation can encode what the port *does* rather than
+what the original *did*. This is the guard against that.
 
 ## Writeup: how the translation went
 

@@ -1,78 +1,228 @@
-# Assignment 1 — Hello World and Getting to Know You
+# Assignment 1: Hello World and Getting to Know You
 
-Language choice for this course: **Kotlin** (the course default).
+Michael Ku
+Data Structures and Algorithms, Fall 2026
 
-## The five parts
+**Language choice: Kotlin** (the course default).
 
-| # | Part | Where | Status |
-| --- | --- | --- | --- |
-| 1 | Course entry survey | [Google Form](https://docs.google.com/forms/d/e/1FAIpQLScJegi7KGH3-TvK7R0ImdSJHRrENx9AuBfAB6pKXzm60bPncw/viewform) | Submitted separately, not in this repo |
-| 2 | Identifying effective strategies for learning | [`docs/learning-strategies.md`](docs/learning-strategies.md) | **Needs your answers** |
-| 3 | Hello World / Kotlin tour | [`docs/kotlin-tour.md`](docs/kotlin-tour.md) | **Needs your answers** (and the debugger needs IntelliJ) |
-| 4 | Translating your old code | [`docs/translation-writeup.md`](docs/translation-writeup.md) | Done — 62 tests |
-| 5 | Implementing meeting scheduler | [`docs/meeting-scheduler.md`](docs/meeting-scheduler.md) | Done — 21 tests |
+---
 
-## Building and running
+## Running the code
 
-Everything runs **from the repository root**, one level up:
+All commands run from the repository root, one level above this folder.
 
 ```bash
-./gradlew :assignment-1:test        # all 83 unit tests
-./gradlew :assignment-1:run         # demo every program
-./gradlew :assignment-1:benchmark   # time the two conflict algorithms as n grows
-./gradlew :assignment-1:build       # compile and test
+./gradlew :assignment-1:test        # 83 unit tests
+./gradlew :assignment-1:run         # run the demos
+./gradlew :assignment-1:benchmark   # time the two scheduler algorithms
 ```
 
-The Gradle wrapper is checked in and the build declares the JDK it needs, so
-none of this depends on which `java` happens to be on `PATH`.
+The Gradle wrapper is checked in, so Gradle does not need to be installed.
 
-To check the Kotlin port against the Python it came from:
+---
+
+## Part 1: Course Entry Survey
+
+Submitted through the Google Form. Nothing in this repo.
+
+---
+
+## Part 2: Identifying Effective Strategies for Learning
+
+### 1. Choose a moment in your educational career where learning went really well. What strategies did you use that worked particularly well?
+
+**Answer:**
+
+
+### 2. Which strategies have led to less effective learning, or less enjoyment of the learning experience?
+
+**Answer:**
+
+
+### 3. The instructor's view is that grappling with a problem is what makes the concepts stick, and that prompting an AI for answers and copying them does not get you there. Do you agree with this framing? How are you thinking about AI tools in this course?
+
+**Answer:**
+
+
+### 4. What strategies will you use in this course to be successful? With respect to AI, what principles will you use?
+
+**Answer:**
+
+
+### 5. What do you think of the proposed activities for the oral quizzes? Would you add or subtract any?
+
+**Answer:**
+
+
+### 6. How can the teaching team support you?
+
+**Answer:**
+
+
+---
+
+## Part 3: Hello World
+
+I read the *Getting Set with Kotlin* page and worked through the beginner Kotlin
+tour, attempting the exercises.
+
+Setup used for this assignment:
+
+- IntelliJ IDEA on macOS
+- Gradle rather than Maven, which the setup page lists as the other option
+- JDK 21
+
+### 1. What features do you like about Kotlin?
+
+**Answer:**
+
+
+### 2. Are there things you were expecting to find that you haven't?
+
+**Answer:**
+
+
+### 3. What questions do you have?
+
+**Answer:**
+
+
+### 4. Did you use the debugger? Do you have experience with interactive debuggers? Were you able to launch it?
+
+**Answer:**
+
+
+---
+
+## Part 4: Translating Your Old Code
+
+### What the original code was
+
+Three Python programs I wrote for the dictionaries, recursion, and refactoring
+assignment in Olin's Software Design course:
+
+1. **Markov text generation.** Reads a source text, records which words follow
+   which other words, and generates new sentences by walking that record at
+   random. Repetition is kept, so a word seen three times after "the" is three
+   times as likely to be chosen.
+2. **Instant-runoff voting.** Runs an alternative-vote election. Each round every
+   ballot counts for its highest-ranked candidate still in the race. A candidate
+   with an absolute majority wins; otherwise the last-placed candidate is
+   eliminated and the round repeats.
+3. **Koch snowflake.** Replaces every line segment with four segments a third as
+   long, with an equilateral bump on the middle third, and repeats.
+
+The original also used matplotlib to draw the snowflake. The port keeps the three
+geometry helpers it needed and drops the plotting, so it has no third-party
+dependencies.
+
+### The Kotlin code
+
+| File | Contents |
+| --- | --- |
+| `src/main/kotlin/markov/Markov.kt` | `buildWordList`, `buildNextWords`, `generateSentence`, `generateText` |
+| `src/main/kotlin/vote/Vote.kt` | `tallyVotes`, `getMinimumCandidate`, `holdAlternativeVote` (recursive), `holdIterativeVote` (the original loop) |
+| `src/main/kotlin/snowflake/Snowflake.kt` | `transformSegment`, `makeSnowflake` |
+| `src/main/kotlin/geometry/Geometry.kt` | `Point`, `dist`, `degrees`, `addDistDegrees` |
+| `src/main/kotlin/Main.kt` | Demo runner for all four programs |
+| `src/main/kotlin/CrossCheck.kt` | Prints next-word maps so they can be diffed against the Python |
+
+Kotlin features the port relies on:
+
+- `tailrec` on `makeSnowflake` and `holdAlternativeVote`, so the compiler turns
+  the recursion into a loop
+- `data class` for `Point` and `ElectionResult`, replacing Python tuples
+- Nullable return types (`String?`, `Conflict?`) instead of returning `None`
+- A `Random` parameter with a default, instead of seeding a global generator
+- `List` and `MutableList` as separate types
+- `require` and `requireNotNull` for argument checking
+
+### Tests
+
+62 tests for this part, in `src/test/kotlin/{markov,vote,snowflake,geometry}/`.
+Most cases come from the original pytest suites so the port is held to the same
+contract. A few are new, and were only possible because the random generator is
+now injected: that the same seed reproduces a sentence, and that different seeds
+produce different ones.
+
+There is also a differential test. `reference/crosscheck.sh` runs the original
+Python and the Kotlin port over the same 17 source texts and diffs the maps they
+build. It reports **107 transitions agree**. This guards against writing tests
+that describe what the port does rather than what the original did.
 
 ```bash
 ./assignment-1/reference/crosscheck.sh
 ```
 
-## What's here
+### How the translation went
 
-**Part 4 — the port.** Three programs translated from Python, taken from the
-dictionaries/recursion/refactoring assignment in Olin's Software Design course:
-Markov text generation, instant-runoff voting, and the Koch snowflake. The
-writeup covers the good (`tailrec` making recursion viable, data classes
-replacing tuples, injecting the random generator), the bad (Python's
-whitespace-collapsing `split()`), and the ugly (a loop that mutates the list it
-iterates, and a condition in the original that turns out to do nothing).
+Short version: `tailrec` made the recursive rewrite better than the loop it
+replaced instead of worse, data classes fixed the untyped tuples, and injecting
+the random generator made the text generator testable. The awkward parts were
+Python's `str.split()` having no Kotlin equivalent, a loop in the original that
+mutates the list it iterates over, and a condition in the original that turns out
+to have no effect.
 
-**Part 5 — the scheduler.** Conflict detection over half-open time intervals,
-implemented twice: an O(1)-space Θ(n²) pairwise check and a Θ(n log n) version
-that sorts first and compares only neighbours. The writeup proves why comparing
-neighbours is sufficient and puts the predicted growth next to measured timings.
+Full writeup, including the parts that went badly:
+**[docs/translation-writeup.md](docs/translation-writeup.md)**
+
+---
+
+## Part 5: Implementing Meeting Scheduler
+
+Determines whether a collection of meetings contains a conflict. Meetings are
+half-open intervals `[start, end)`, so a meeting ending exactly when another
+begins is not a conflict.
+
+Both required algorithms are in `src/main/kotlin/scheduler/Scheduler.kt`:
+
+- `findConflictByPairs` — the straightforward version, comparing every pair
+- `findConflictBySorting` — sorts by start time with Kotlin's built-in
+  `sortedBy`, then compares only neighbouring meetings
+
+Expected growth with n:
+
+| | Best case | Worst case | Extra space |
+| --- | --- | --- | --- |
+| Pairwise | O(1) | Θ(n²) | O(1) |
+| Sort first | Θ(n log n) | Θ(n log n) | O(n) |
+
+Doubling n should roughly quadruple the pairwise time. The sorting version is
+Θ(n log n) in every case, because the sort runs before anything can return early.
+
+21 tests in `src/test/kotlin/scheduler/SchedulerTest.kt` cover both
+implementations, including both examples from the day 1 page, the edge case of
+one meeting ending exactly when another starts, and 2000 randomly generated
+schedules checking that the two algorithms always agree.
+
+Writeup, including why comparing only neighbours is enough and measured timings
+against the predicted growth:
+**[docs/meeting-scheduler.md](docs/meeting-scheduler.md)**
+
+---
 
 ## Layout
 
 ```
-DSA_2026/                            the Gradle build lives at the repo root
-├── settings.gradle.kts              declares assignment-1 as a subproject
-├── gradlew, gradle/                 wrapper, and the JDK the build asks for
-└── assignment-1/
-    ├── README.md                    this file
-    ├── build.gradle.kts             Kotlin JVM plugin, JVM toolchain 21
-    ├── docs/
-    │   ├── learning-strategies.md   part 2
-    │   ├── kotlin-tour.md           part 3
-    │   ├── translation-writeup.md   part 4
-    │   └── meeting-scheduler.md     part 5
-    ├── src/main/kotlin/
-    │   ├── Main.kt                  demo runner
-    │   ├── CrossCheck.kt            prints next-word maps for the diff harness
-    │   ├── scheduler/Scheduler.kt   meeting conflict detection, both algorithms
-    │   ├── scheduler/Benchmark.kt   times the two against each other
-    │   ├── markov/Markov.kt         Markov text generation
-    │   ├── vote/Vote.kt             instant-runoff voting, recursive + iterative
-    │   ├── snowflake/Snowflake.kt   Koch snowflake
-    │   └── geometry/Geometry.kt     Point, dist, degrees, addDistDegrees
-    ├── src/test/kotlin/             83 tests, one suite per source file
-    └── reference/
-        ├── corpus.txt               source texts shared by both implementations
-        ├── crosscheck.sh            runs the Python and Kotlin, diffs the output
-        └── python/                  the original Python, unmodified
+assignment-1/
+├── README.md                        this file
+├── build.gradle.kts
+├── docs/
+│   ├── translation-writeup.md       part 4 writeup
+│   └── meeting-scheduler.md         part 5 writeup
+├── src/main/kotlin/
+│   ├── Main.kt
+│   ├── CrossCheck.kt
+│   ├── geometry/Geometry.kt
+│   ├── markov/Markov.kt
+│   ├── vote/Vote.kt
+│   ├── snowflake/Snowflake.kt
+│   └── scheduler/
+│       ├── Scheduler.kt
+│       └── Benchmark.kt
+├── src/test/kotlin/                 83 tests
+└── reference/
+    ├── corpus.txt
+    ├── crosscheck.sh
+    └── python/                      the original Python, unmodified
 ```
