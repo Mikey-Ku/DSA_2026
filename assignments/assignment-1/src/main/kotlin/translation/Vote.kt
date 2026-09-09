@@ -1,25 +1,21 @@
 package translation
 
+// Calculate the winner of an IRV election.
+
 /**
- * The outcome of an election.
- *
- * @property winner The name of the winning candidate.
- * @property votes The number of votes the winner received in the final round.
+ * The winning candidate's name and the number of votes they won with in the
+ * final round.
  */
 data class ElectionResult(val winner: String, val votes: Int)
 
 /**
- * Count the votes received by each candidate in one round of an IRV election.
+ * Calculate the number of votes received by each candidate in a round of an IRV
+ * election.
  *
- * Each ranked vote is awarded to the highest-ranked candidate on it who is still
- * in the race. A vote whose candidates have all been eliminated counts for
- * nobody. Counting this way means eliminating a candidate never requires editing
- * the votes themselves.
- *
- * @param candidates The candidates still in the race.
- * @param rankedVotes The ranked votes, each ordered most to least preferred.
- * @return A map from each candidate to the number of votes they received, in the
- *     same order as [candidates].
+ * @param candidates A list representing the candidates still in the race.
+ * @param rankedVotes A list of lists representing ranked votes for candidates,
+ *     with each vote from most to least preferred.
+ * @return A map from candidates to the number of votes they received.
  */
 fun tallyVotes(
     candidates: List<String>,
@@ -36,11 +32,10 @@ fun tallyVotes(
 }
 
 /**
- * Find the candidate who received the fewest votes.
+ * Find and return the candidate who received the minimum number of votes.
  *
- * Ties are broken by whichever tied candidate appears first in [voteCounts].
- *
- * @param voteCounts A map from candidates to the votes they received this round.
+ * @param voteCounts A map from candidates to the number of votes received in
+ *     this round of the IRV election.
  * @return The name of the candidate with the fewest votes, or `null` if
  *     [voteCounts] is empty.
  */
@@ -48,24 +43,20 @@ fun getMinimumCandidate(voteCounts: Map<String, Int>): String? =
     voteCounts.minByOrNull { it.value }?.key
 
 /**
- * Determine the winner of an alternative (instant runoff) election, recursively.
+ * Determine the winner of an alternative (instant runoff) election.
  *
- * Each round, votes are tallied. If a candidate holds more than half of the
- * votes cast, they win. Otherwise the candidate with the fewest votes is
- * eliminated and the election is re-run with the remaining candidates. When only
- * one candidate is left, they win with however many votes still name them.
+ * Given a list of candidates and ranked votes, hold an alternative vote election
+ * and return the winning candidate and the number of votes they received in the
+ * final round. Each ranked vote does not need to rank all of the candidates, but
+ * if all of their chosen candidates are eliminated, the vote is not counted in
+ * the total (for determining a majority winner).
  *
- * A ranked vote need not rank every candidate. Once all of the candidates it
- * names are eliminated it stops counting toward the total, which is why a
- * majority is measured against the votes cast in that round rather than against
- * the size of [rankedVotes].
- *
- * This is the recursive rewrite of [holdIterativeVote], and the two are required
- * to agree on every input.
- *
- * @param candidates The candidates in the race. Must not be empty.
- * @param rankedVotes The ranked votes, each ordered most to least preferred.
- * @return The winning candidate and the votes they won with in the final round.
+ * @param candidates A list of strings representing the candidates' names. Must
+ *     not be empty.
+ * @param rankedVotes A list of lists of strings representing the ranked votes for
+ *     candidates, with each list in order from most to least preferred.
+ * @return The winning candidate's name and the number of votes they won with in
+ *     the final round.
  * @throws IllegalArgumentException If [candidates] is empty.
  */
 tailrec fun holdAlternativeVote(
@@ -74,7 +65,6 @@ tailrec fun holdAlternativeVote(
 ): ElectionResult {
     require(candidates.isNotEmpty()) { "An election needs at least one candidate." }
 
-    // Base case: one candidate left, so they win with every vote that names them.
     if (candidates.size == 1) {
         val winner = candidates.first()
         return ElectionResult(winner, rankedVotes.count { winner in it })
@@ -83,14 +73,12 @@ tailrec fun holdAlternativeVote(
     val voteCounts = tallyVotes(candidates, rankedVotes)
     val totalVotes = voteCounts.values.sum()
 
-    // Base case: somebody holds an absolute majority of the votes cast.
     for ((candidate, numVotes) in voteCounts) {
         if (numVotes > totalVotes / 2) {
             return ElectionResult(candidate, numVotes)
         }
     }
 
-    // Recursive case: drop the weakest candidate and run the election again.
     val minimumCandidate = getMinimumCandidate(voteCounts)
     return holdAlternativeVote(
         candidates.filter { it != minimumCandidate },
@@ -99,14 +87,17 @@ tailrec fun holdAlternativeVote(
 }
 
 /**
- * Determine the winner of an alternative (instant runoff) election, iteratively.
+ * Determine the winner of an alternative (instant runoff) election.
  *
- * The loop-based implementation, kept so the tests can assert that the recursive
- * version in [holdAlternativeVote] produces identical results.
+ * This is the original, iterative implementation. It gives the same result as
+ * [holdAlternativeVote].
  *
- * @param candidates The candidates in the race. Must not be empty.
- * @param rankedVotes The ranked votes, each ordered most to least preferred.
- * @return The winning candidate and the votes they won with in the final round.
+ * @param candidates A list of strings representing the candidates' names. Must
+ *     not be empty.
+ * @param rankedVotes A list of lists of strings representing the ranked votes for
+ *     candidates, with each list in order from most to least preferred.
+ * @return The winning candidate's name and the number of votes they won with in
+ *     the final round.
  * @throws IllegalArgumentException If [candidates] is empty.
  */
 fun holdIterativeVote(

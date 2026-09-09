@@ -1,24 +1,28 @@
 package translation
 
-/** The interior angle of the equilateral bump added to each segment. */
-private const val BUMP_ANGLE_DEGREES = 60.0
+// Library to generate the points for a Koch snowflake of a given iteration.
 
-/** Each iteration divides a segment into thirds. */
+private const val BUMP_ANGLE_DEGREES = 60.0
 private const val ONE_THIRD = 1.0 / 3.0
 private const val TWO_THIRDS = 2.0 / 3.0
 
 /**
- * Transform one line segment of a Koch snowflake into the next iteration.
+ * Transform a line segment of the Koch snowflake to get the points in the next
+ * iteration.
  *
- * The transformed segment has exactly five points. The first and last are
- * [startPoint] and [endPoint]. The second and fourth lie one third and two
- * thirds of the way along the original segment. The middle point is placed so
- * that it forms an equilateral triangle with the second and fourth points,
- * always lying counterclockwise from the original segment.
+ * Given a starting and ending point of a single line segment in the Koch
+ * snowflake, calculate the points that would be in the next iteration of the
+ * snowflake. The transformed segment has exactly five points, where the first
+ * and last points are [startPoint] and [endPoint], respectively. The point after
+ * [startPoint] and the point before [endPoint] are a third and two thirds of the
+ * way between [startPoint] and [endPoint], respectively. The middle point is
+ * placed in such a way that it forms an equilateral triangle with the second and
+ * fourth points in the transformed segment, always lying counterclockwise from
+ * the original segment (with [endPoint] rotating about [startPoint]).
  *
  * @param startPoint The point representing the start of the segment.
  * @param endPoint The point representing the end of the segment.
- * @return The five points of the transformed segment, in order.
+ * @return A list of points in the transformed segment.
  */
 fun transformSegment(startPoint: Point, endPoint: Point): List<Point> {
     val segmentLength = dist(startPoint, endPoint)
@@ -38,15 +42,11 @@ fun transformSegment(startPoint: Point, endPoint: Point): List<Point> {
 /**
  * Generate the points for a given iteration of the Koch snowflake.
  *
- * Every segment in [points] is replaced by its five-point transformation, and
- * the process repeats [depth] times. A depth of zero returns [points] unchanged.
- *
- * This is marked `tailrec`, so the compiler rewrites the recursion into a loop
- * rather than consuming a stack frame per iteration.
- *
- * @param points The points of the snowflake so far, in order. Must not be empty.
- * @param depth How many further iterations to generate. Must not be negative.
- * @return The points of the snowflake at the requested depth.
+ * @param points A list of points in the snowflake. Must not be empty.
+ * @param depth How many more iterations of the snowflake to generate before
+ *     returning. Must not be negative.
+ * @return A list of points representing the points of the snowflake for the
+ *     given depth.
  * @throws IllegalArgumentException If [points] is empty or [depth] is negative.
  */
 tailrec fun makeSnowflake(points: List<Point>, depth: Int): List<Point> {
@@ -59,8 +59,6 @@ tailrec fun makeSnowflake(points: List<Point>, depth: Int): List<Point> {
 
     val transformedPoints = ArrayList<Point>(points.size * 4)
     for (index in 0 until points.size - 1) {
-        // Drop the last point of each transformed segment: it is the same as
-        // the first point of the next one, and would otherwise be duplicated.
         transformedPoints += transformSegment(points[index], points[index + 1]).dropLast(1)
     }
     transformedPoints += points.last()
