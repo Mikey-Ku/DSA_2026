@@ -10,8 +10,8 @@ import kotlin.test.assertTrue
 
 /** Keeps both scheduler approaches together so the same tests can check each one. */
 private val FINDERS: List<Pair<String, (List<Meeting>) -> Conflict?>> = listOf(
-    "pairwise" to ::findConflictByPairs,
-    "sorting" to ::findConflictBySorting,
+    "pairwise" to ::conflictByPairs,
+    "sorting" to ::conflictBySort,
 )
 
 /**
@@ -21,13 +21,13 @@ private val FINDERS: List<Pair<String, (List<Meeting>) -> Conflict?>> = listOf(
  */
 private fun assertConflict(
     meetings: List<Meeting>,
-    expectConflict: Boolean,
+    expected: Boolean,
     message: String = "",
 ) {
-    for ((name, findConflict) in FINDERS) {
-        val conflict = findConflict(meetings)
+    for ((name, find) in FINDERS) {
+        val conflict = find(meetings)
         assertEquals(
-            expectConflict,
+            expected,
             conflict != null,
             "$message [$name] on $meetings",
         )
@@ -111,7 +111,7 @@ class ConflictDetectionTest {
                 meeting("B", "13:00", "14:00"),
                 meeting("C", "10:45", "11:30"),
             ),
-            expectConflict = true,
+            expected = true,
         )
     }
 
@@ -123,7 +123,7 @@ class ConflictDetectionTest {
                 meeting("B", "11:00", "11:30"),
                 meeting("C", "13:00", "14:00"),
             ),
-            expectConflict = false,
+            expected = false,
         )
     }
 
@@ -132,8 +132,8 @@ class ConflictDetectionTest {
         // Back-to-back meetings should be allowed, regardless of their list order.
         val first = meeting("First", "09:00", "10:00")
         val second = meeting("Second", "10:00", "11:00")
-        assertConflict(listOf(first, second), expectConflict = false, message = "in order:")
-        assertConflict(listOf(second, first), expectConflict = false, message = "reversed:")
+        assertConflict(listOf(first, second), expected = false, message = "in order:")
+        assertConflict(listOf(second, first), expected = false, message = "reversed:")
     }
 
     @Test
@@ -143,24 +143,24 @@ class ConflictDetectionTest {
                 meeting("First", "09:00", "10:01"),
                 meeting("Second", "10:00", "11:00"),
             ),
-            expectConflict = true,
+            expected = true,
         )
     }
 
     @Test
     fun `an empty schedule has no conflict`() {
-        assertConflict(emptyList(), expectConflict = false)
+        assertConflict(emptyList(), expected = false)
     }
 
     @Test
     fun `a single meeting has no conflict`() {
-        assertConflict(listOf(meeting("Only", "10:00", "11:00")), expectConflict = false)
+        assertConflict(listOf(meeting("Only", "10:00", "11:00")), expected = false)
     }
 
     @Test
     fun `two identical meetings conflict`() {
         val slot = meeting("Slot", "10:00", "11:00")
-        assertConflict(listOf(slot, slot.copy(title = "Double booked")), expectConflict = true)
+        assertConflict(listOf(slot, slot.copy(title = "Double booked")), expected = true)
     }
 
     @Test
@@ -170,7 +170,7 @@ class ConflictDetectionTest {
                 meeting("All hands", "09:00", "17:00"),
                 meeting("Standup", "10:00", "10:15"),
             ),
-            expectConflict = true,
+            expected = true,
         )
     }
 
@@ -181,7 +181,7 @@ class ConflictDetectionTest {
                 meeting("Short", "10:00", "10:15"),
                 meeting("Long", "10:00", "11:00"),
             ),
-            expectConflict = true,
+            expected = true,
         )
     }
 
@@ -195,7 +195,7 @@ class ConflictDetectionTest {
         )
         val random = Random(seed = 7)
         repeat(20) {
-            assertConflict(meetings.shuffled(random), expectConflict = false)
+            assertConflict(meetings.shuffled(random), expected = false)
         }
     }
 
@@ -203,7 +203,7 @@ class ConflictDetectionTest {
     fun `a conflict at the very end of a long schedule is still found`() {
         val meetings = List(200) { meeting("Slot $it", formatTime(it * 4), formatTime(it * 4 + 4)) } +
             meeting("Latecomer", formatTime(199 * 4 + 2), formatTime(199 * 4 + 6))
-        assertConflict(meetings, expectConflict = true)
+        assertConflict(meetings, expected = true)
     }
 
     @Test
@@ -214,7 +214,7 @@ class ConflictDetectionTest {
             meeting("Short1", "09:10", "09:20"),
             meeting("Short2", "09:30", "09:40"),
         )
-        val conflict = assertNotNull(findConflictBySorting(meetings))
+        val conflict = assertNotNull(conflictBySort(meetings))
         assertTrue(conflict.earlier.overlaps(conflict.later))
     }
 }
@@ -235,8 +235,8 @@ class AlgorithmEquivalenceTest {
                 Meeting("M$index", start, start + length)
             }
             assertEquals(
-                hasConflictByPairs(meetings),
-                hasConflictBySorting(meetings),
+                conflictByPairs(meetings) != null,
+                conflictBySort(meetings) != null,
                 "trial $trial disagreed on $meetings",
             )
         }
@@ -245,7 +245,7 @@ class AlgorithmEquivalenceTest {
     @Test
     fun `a schedule of back-to-back meetings is conflict-free at any size`() {
         val meetings = List(500) { Meeting("Slot $it", it * 2, it * 2 + 2) }
-        assertNull(findConflictByPairs(meetings))
-        assertNull(findConflictBySorting(meetings))
+        assertNull(conflictByPairs(meetings))
+        assertNull(conflictBySort(meetings))
     }
 }

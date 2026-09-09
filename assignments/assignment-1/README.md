@@ -112,11 +112,18 @@ My response about the translation process is in `docs/translation-writeup.md`.
 The meeting scheduler checks whether any two meetings overlap. The two required
 versions are in `src/main/kotlin/scheduler/Scheduler.kt`.
 
-- `findConflictByPairs` checks every possible pair. Its worst-case running time
+- `conflictByPairs` checks every possible pair. Its worst-case running time
   is Theta(n squared).
-- `findConflictBySorting` sorts the meetings and then checks neighboring
+- `conflictBySort` sorts the meetings and then checks neighboring
   meetings. Its running time is Theta(n log n).
 
 The scheduler tests include overlapping meetings, back-to-back meetings, empty
 schedules, and schedules in different orders. More information is in
 `docs/meeting-scheduler.md`.
+
+To run both algorithms on the two example schedules from day 1, run this from
+the repository root:
+
+```bash
+./gradlew :assignment-1:run
+```

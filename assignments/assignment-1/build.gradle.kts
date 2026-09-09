@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "2.4.10"
+    application
 }
 
 group = "edu.olin.dsa2026"
@@ -24,4 +25,9 @@ tasks.test {
     testLogging {
         events("passed", "failed", "skipped")
     }
+}
+
+application {
+    // `./gradlew :assignment-1:run` launches the meeting scheduler demo.
+    mainClass.set("scheduler.MainKt")
 }
