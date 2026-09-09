@@ -4,7 +4,7 @@ Coursework for Data Structures and Algorithms, 2026.
 
 | Assignment | Topic | Notes |
 | --- | --- | --- |
-| [assignment-1](assignment-1) | Hello world, translating old code, meeting scheduler | Kotlin port of three Python programs + conflict detection, 83 tests |
+| [assignment-1](assignments/assignment-1) | Hello world, translating old code, meeting scheduler | Kotlin port of three Python programs and two conflict-detection algorithms |
 
 ## Building
 
@@ -18,10 +18,10 @@ Run everything from this directory:
 ```bash
 ./gradlew build              # compile and test every assignment
 ./gradlew test               # run every assignment's tests
-./gradlew :assignment-1:run  # run one assignment's demo
 ```
 
-Each assignment has its own README with details on what it contains.
+Each assignment lives in `assignments/` and has its own README with details on
+what it contains.
 
 ## Opening in an editor
 

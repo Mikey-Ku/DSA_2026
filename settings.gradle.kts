@@ -8,3 +8,4 @@ rootProject.name = "DSA_2026"
 
 // One subproject per assignment. Add new assignments here as they arrive.
 include("assignment-1")
+project(":assignment-1").projectDir = file("assignments/assignment-1")
