@@ -21,6 +21,8 @@ both its first and last nodes, so every operation takes O(1) time. Tests are in
 
 All three are in `linked_structures/practice.py`.
 
+Note: I only wrote tests for Exercise 4, not for Exercises 3 and 5.
+
 ### Exercise 3: Reversing a stack
 
 Pop every value into a queue, then move every value from the queue back onto the

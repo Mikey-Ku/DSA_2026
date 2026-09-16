@@ -13,7 +13,7 @@ class LinkedQueue[T]:
         """Creates an empty queue."""
         self.values: DoublyLinkedList[T] = DoublyLinkedList()
 
-    def add(self, data: T) -> None:
+    def enqueue(self, data: T) -> None:
         """Adds a value to the back of the queue.
 
         Args:
@@ -21,7 +21,7 @@ class LinkedQueue[T]:
         """
         self.values.push_back(data)
 
-    def remove(self) -> T | None:
+    def dequeue(self) -> T | None:
         """Removes the front value, which is the oldest one in the queue.
 
         Returns:

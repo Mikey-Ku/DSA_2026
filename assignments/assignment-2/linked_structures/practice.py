@@ -17,11 +17,11 @@ def reverse_stack[T](stack: LinkedStack[T]) -> None:
     while not stack.is_empty():
         value = stack.pop()
         if value is not None:
-            queue.add(value)
+            queue.enqueue(value)
 
     # Push every value back. The old top comes out first, so it lands on the bottom.
     while not queue.is_empty():
-        value = queue.remove()
+        value = queue.dequeue()
         if value is not None:
             stack.push(value)
 
@@ -74,11 +74,11 @@ def copy_stack[T](stack: LinkedStack[T]) -> LinkedStack[T]:
     while not stack.is_empty():
         value = stack.pop()
         if value is not None:
-            queue.add(value)
+            queue.enqueue(value)
 
     # Push it all back. The stack is now upside down.
     while not queue.is_empty():
-        value = queue.remove()
+        value = queue.dequeue()
         if value is not None:
             stack.push(value)
 
@@ -86,12 +86,12 @@ def copy_stack[T](stack: LinkedStack[T]) -> LinkedStack[T]:
     while not stack.is_empty():
         value = stack.pop()
         if value is not None:
-            queue.add(value)
+            queue.enqueue(value)
 
     # Rebuild the original stack and the copy at the same time, bottom value first.
     copy: LinkedStack[T] = LinkedStack()
     while not queue.is_empty():
-        value = queue.remove()
+        value = queue.dequeue()
         if value is not None:
             stack.push(value)
             copy.push(value)
