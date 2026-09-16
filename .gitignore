@@ -11,7 +11,7 @@ build/
 .kotlin/
 out/
 
-# Python (reference sources only; nothing here is built)
+# Python
 __pycache__/
 *.pyc
 .venv/

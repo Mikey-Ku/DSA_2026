@@ -4,6 +4,13 @@ Michael Ku
 
 Data Structures and Algorithms, Fall 2026
 
+Written in Kotlin and built with Gradle. Run these from the repository root:
+
+```bash
+./gradlew :assignment-1:test    # run the tests
+./gradlew :assignment-1:run     # run the meeting scheduler examples
+```
+
 ## Part 1: Course Entry Survey
 
 I submitted the course entry survey through the Google Form.
@@ -120,10 +127,3 @@ versions are in `src/main/kotlin/scheduler/Scheduler.kt`.
 The scheduler tests include overlapping meetings, back-to-back meetings, empty
 schedules, and schedules in different orders. More information is in
 `docs/meeting-scheduler.md`.
-
-To run both algorithms on the two example schedules from day 1, run this from
-the repository root:
-
-```bash
-./gradlew :assignment-1:run
-```
