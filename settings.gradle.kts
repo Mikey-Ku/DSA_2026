@@ -6,7 +6,5 @@ plugins {
 
 rootProject.name = "DSA_2026"
 
-// One subproject per Kotlin assignment. Add new ones here as they arrive.
-// Assignment 2 is written in Python, so it is not part of the Gradle build.
 include("assignment-1")
 project(":assignment-1").projectDir = file("assignments/assignment-1")
