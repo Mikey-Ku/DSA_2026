@@ -8,3 +8,4 @@ Coursework for Data Structures and Algorithms, Fall 2026.
 | [Assignment 2](assignments/assignment-2) | Linked list, stack, and queue (Python) |
 | [Assignment 3](assignments/assignment-3) | Graphs, priority queues, and Dijkstra's algorithm (Python) |
 | [Assignment 4](assignments/assignment-4) | Sorting algorithms, benchmarking, and the master theorem (Python) |
+| [Assignment 5](assignments/assignment-5) | Strassen's matrix multiplication and Needleman-Wunsch sequence alignment (Python) |
