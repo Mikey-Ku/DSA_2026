@@ -9,3 +9,5 @@ Coursework for Data Structures and Algorithms, Fall 2026.
 | [Assignment 3](assignments/assignment-3) | Graphs, priority queues, and Dijkstra's algorithm (Python) |
 | [Assignment 4](assignments/assignment-4) | Sorting algorithms, benchmarking, and the master theorem (Python) |
 | [Assignment 5](assignments/assignment-5) | Strassen's matrix multiplication and Needleman-Wunsch sequence alignment (Python) |
+| [Assignment 7](assignments/assignment-7) | Hash table and Lempel-Ziv compression (Python) |
+| [Assignment 8](assignments/assignment-8) | K-D trees and nearest neighbor search (Python) |
